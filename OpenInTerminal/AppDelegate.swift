@@ -27,7 +27,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     // MARK: - Lifecycle
     
     func applicationDidFinishLaunching(_ notification: Notification) {
+        DefaultsManager.shared.migrateFromAppGroupIfNeeded()
         DefaultsManager.shared.firstSetup()
+        SharedPreferences.export()
         addObserver()
         terminateOpenInTerminalHelper()
         setStatusItemIcon()
@@ -168,6 +170,10 @@ extension AppDelegate {
                              forKeyPath: Constants.Key.onlyActivateShortcutsInFinder, 
                              options: .new, 
                              context: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(defaultsDidChange),
+                                               name: UserDefaults.didChangeNotification,
+                                               object: Defaults)
         NSWorkspace.shared.notificationCenter.addObserver(self, 
                                                           selector: #selector(activeAppDidChange), 
                                                           name: NSWorkspace.didActivateApplicationNotification, 
@@ -180,7 +186,15 @@ extension AppDelegate {
         OpenNotifier.removeObserver(observer: self, notification: .copyPathToClipboard)
         
         Defaults.removeObserver(self, forKeyPath: Constants.Key.onlyActivateShortcutsInFinder)
+        NotificationCenter.default.removeObserver(self,
+                                                  name: UserDefaults.didChangeNotification,
+                                                  object: Defaults)
         NSWorkspace.shared.notificationCenter.removeObserver(self)
+    }
+    
+    /// Keeps the Finder extension's copy of the preferences up to date.
+    @objc func defaultsDidChange() {
+        SharedPreferences.export()
     }
     
     @objc func activeAppDidChange(_ notification: Notification) {

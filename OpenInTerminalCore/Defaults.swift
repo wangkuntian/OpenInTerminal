@@ -8,18 +8,14 @@
 
 import Foundation
 
-/// group defaults
-let GroupDefaults = UserDefaults(suiteName: Constants.Id.Group)
-
 /// current defaults
-public var Defaults: UserDefaults = {
-    if Bundle.main.bundleIdentifier == Constants.Id.OpenInTerminalLite ||
-        Bundle.main.bundleIdentifier == Constants.Id.OpenInEditorLite {
-        return UserDefaults.standard
-    } else {
-        return GroupDefaults ?? UserDefaults.standard
-    }
-}()
+///
+/// Each process keeps its own standard defaults. The app-group suite is not
+/// used because cfprefsd rejects the non-sandboxed main app's reads and writes
+/// of `group.wang.jianing.app.OpenInTerminal` on macOS 27, so nothing
+/// was ever persisted or shared with the Finder extension. The extension is fed
+/// through `SharedPreferences` instead.
+public var Defaults: UserDefaults = UserDefaults.standard
 
 public class DefaultsKeys {
     fileprivate init() {}

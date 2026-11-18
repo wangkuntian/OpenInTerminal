@@ -64,6 +64,11 @@ Become a sponsor through [GitHub Sponsors](https://github.com/sponsors/Ji4n1ng) 
 ## Changes 🗒
 
 <details><summary>show all</summary><br>
+<p><strong>version 2.4.0</strong></p>
+<ul>
+<li>Fixed preferences not being saved on macOS 27 (and later): every launch re-ran the first-time setup and the Finder extension context menu was empty. macOS no longer lets the non-sandboxed app read or write the shared app-group preferences, so the app now uses its own defaults and mirrors what the Finder extension needs.</li>
+<li>Requires macOS 12 or later (previous releases supported macOS 10.13; that deployment target can no longer be built with current Xcode).</li>
+</ul>
 <p><strong>version 2.3.9</strong></p>
 <ul>
 <li>Security: Fixed an AppleScript/command injection vulnerability that allowed arbitrary command execution via a crafted folder name when opening it in a non-default terminal or an editor. Thanks to Paul Gerste (<a href="https://www.sonarsource.com">Sonar</a>) for the responsible disclosure.</li>

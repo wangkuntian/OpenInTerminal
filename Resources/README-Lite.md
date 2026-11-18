@@ -273,6 +273,10 @@ tccutil reset AppleEvents wang.jianing.app.OpenInEditor-Lite
 ## Changes 🗒
 
 <details><summary>show all</summary><br>
+<p><strong>version 1.3.0</strong></p>
+<ul>
+<li>Requires macOS 12 or later (previous releases supported macOS 10.9; that deployment target can no longer be built with current Xcode).</li>
+</ul>
 <p><strong>version 1.2.8</strong></p>
 <ul>
 <li>Security: Fixed an AppleScript/command injection vulnerability that allowed arbitrary command execution via a crafted folder name when opening it in a non-default terminal or an editor. Thanks to Paul Gerste (<a href="https://www.sonarsource.com">Sonar</a>) for the responsible disclosure.</li>

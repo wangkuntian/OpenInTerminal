@@ -108,6 +108,10 @@ extension App: Openable {
     }
     
     public func openInSandbox(_ urls: [URL]) throws {
+        // The Finder extension may run before the app's preferences have been
+        // imported into the extension's own defaults.
+        SharedPreferences.importIfNeeded()
+
         // Build the invocation as a list of discrete arguments — the leading
         // program, the app-specific option tokens (trusted config from
         // getOpenArguments), then the raw target paths as individual elements.

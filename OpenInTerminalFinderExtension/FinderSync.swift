@@ -43,6 +43,9 @@ class FinderSync: FIFinderSync {
     }
     
     override func menu(for menuKind: FIMenuKind) -> NSMenu {
+        // Pick up preference changes made in the app since the last menu build.
+        SharedPreferences.importIfNeeded()
+
         var menu = NSMenu(title: "")
         
         switch menuKind {

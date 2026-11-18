@@ -377,9 +377,28 @@ public class DefaultsManager {
         Defaults.synchronize()
     }
     
+    /// Copies preferences that older versions stored in the shared app group to
+    /// the app's own defaults. Reading the group container is rejected by
+    /// cfprefsd on macOS 27, in which case this is a no-op.
+    public func migrateFromAppGroupIfNeeded() {
+        guard isFirstSetup == false,
+              let groupDefaults = UserDefaults(suiteName: Constants.Id.Group),
+              let values = groupDefaults.persistentDomain(forName: Constants.Id.Group),
+              values.isEmpty == false else {
+            return
+        }
+        logw("Migrating preferences from the app group")
+        for (key, value) in values {
+            Defaults.set(value, forKey: key)
+        }
+        Defaults.synchronize()
+    }
+
     public func removeAllUserDefaults() {
         logw("Remove all UserDefaults")
-        Defaults.removePersistentDomain(forName: Constants.Id.Group)
+        if let bundleId = Bundle.main.bundleIdentifier {
+            Defaults.removePersistentDomain(forName: bundleId)
+        }
         Defaults.synchronize()
     }
     
